@@ -6,4 +6,5 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 opencv = "0.96.0"
-ureq = "3.1.2"
+serde = { version = "1.0.228", features = ["derive"] }
+ureq = { version = "3.1.2", features = ["json"] }
