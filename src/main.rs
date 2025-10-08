@@ -1,6 +1,7 @@
-#![allow(unused_variables)]
+#![allow(unused_variables, dead_code)]
 
 use anyhow::Result;
+use serde::{Deserialize, Serialize};
 
 fn main() {
     let q = get_target_quadrant().unwrap();
@@ -11,6 +12,9 @@ fn main() {
 
     let i2 = get_camera_2_vec().unwrap();
     println!("{:?}", &i2[..10]);
+
+    let c = move_car(0.5, false).unwrap();
+    println!("{c:?}");
 }
 
 fn get_target_quadrant() -> Result<u8> {
@@ -36,4 +40,23 @@ fn get_camera_2_vec() -> Result<Vec<u8>> {
         .call()?
         .body_mut()
         .read_to_vec()?)
+}
+
+#[derive(Serialize, Debug)]
+struct ControlCarRequest {
+    speed: f32,
+    flip: bool,
+}
+
+#[derive(Deserialize, Debug)]
+struct ControlCarResponse {
+    status: String,
+}
+
+fn move_car(speed: f32, flip: bool) -> Result<ControlCarResponse> {
+    Ok(ureq::put("http://hackathon-1-car.local:5000")
+        .header("Authorization", "985898")
+        .send_json(&ControlCarRequest { speed, flip })?
+        .body_mut()
+        .read_json::<ControlCarResponse>()?)
 }
