@@ -19,7 +19,8 @@ struct ControlCarResponse {
 }
 
 pub fn move_car(speed: f32, flip: bool) -> Result<()> {
-    ureq::put("http://hackathon-1-car.local:5000")
+    // ureq::put("http://hackathon-1-car.local:5000")
+    ureq::put("http://192.168.0.212:5000")
         .header("Authorization", "985898")
         .send_json(&ControlCarRequest { speed, flip })?
         .body_mut()
