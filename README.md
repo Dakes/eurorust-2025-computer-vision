@@ -98,3 +98,18 @@ curl 192.168.0.177:31415/quadrant --header 'Authorization: 123456'
 ```
 
 The target quadrant will change every 5 minutes throughout the day, and every 30 seconds once we enter "competition mode" at the end of the day (and actively judge whose solution is fastest).
+
+# Dependencies
+## Ubuntu
+```bash
+sudo apt install -y \
+    libopencv-dev libopencv-contrib-dev \
+    clang cmake pkg-config build-essential \
+    llvm
+```
+
+# Mac
+
+```bash
+brew install opencv
+```
