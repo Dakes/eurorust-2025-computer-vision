@@ -3,24 +3,33 @@
 use anyhow::Result;
 use image::{DynamicImage, ImageReader};
 use serde::{Deserialize, Serialize};
-use std::io::Cursor;
+use std::{io::Cursor, thread, time::Duration};
 
 fn main() {
-    let q = get_target_quadrant().unwrap();
-    println!("{q}");
+    loop {
+        // get image data
+        let i1 = get_camera_1_vec().unwrap();
+        let x1 = convert(i1).unwrap();
+        println!("{:?}", &x1.as_bytes()[..10]);
 
-    let i1 = get_camera_1_vec().unwrap();
-    println!("{:?}", &i1[..10]);
+        let i2 = get_camera_2_vec().unwrap();
+        let x2 = convert(i2).unwrap();
+        println!("{:?}", &x2.as_bytes()[..10]);
 
-    let i2 = get_camera_2_vec().unwrap();
-    println!("{:?}", &i2[..10]);
+        // get target
+        let t = get_target_quadrant().unwrap();
+        println!("{t}");
 
-    let c = move_car(0.5, false).unwrap();
-    println!("{c:?}");
+        // calculate move
+        let command = 0.5;
 
-    let i = get_camera_1_vec().unwrap();
-    let x = convert(i).unwrap();
-    println!("{:?}", &x.as_bytes()[..10]);
+        // move car
+        let c = move_car(command, true).unwrap();
+        println!("{c:?}");
+
+        // sleep
+        thread::sleep(Duration::from_secs(1));
+    }
 }
 
 fn get_target_quadrant() -> Result<u8> {
