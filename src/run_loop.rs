@@ -82,3 +82,15 @@ fn convert(i: Vec<u8>) -> Result<DynamicImage> {
         .with_guessed_format()?
         .decode()?)
 }
+
+fn turn_right() -> Result<ControlCarResponse> {
+    move_car(0.27, true)
+}
+
+fn turn_left() -> Result<ControlCarResponse> {
+    move_car(-0.27, true)
+}
+
+fn drive_forward() -> Result<ControlCarResponse> {
+    move_car(1, false)
+}
