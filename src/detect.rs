@@ -17,14 +17,11 @@ pub fn detect_markers(img: &Mat) -> opencv::Result<Detection> {
     )?;
     let params = aruco::DetectorParameters::create()?;
 
-    let camera_matrix = Mat::default();
-    let dist_coeffs = Mat::default();
-
     let mut corners = Vector::new();
     let mut ids_mat = Mat::default();
     let mut rejected = Vector::new();
 
-    aruco::detect_markers(img, &dict, &mut corners, &mut ids_mat, &params, &mut rejected, &camera_matrix, &dist_coeffs)?;
+    aruco::detect_markers(img, &dict, &mut corners, &mut ids_mat, &params, &mut rejected)?;
 
     let ids = mat_ids_to_vec(&ids_mat)?;
     Ok(Detection { ids, corners, rejected })
