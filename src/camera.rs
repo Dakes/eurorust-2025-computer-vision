@@ -7,7 +7,8 @@ use serde::{Deserialize, Serialize};
 use std::{io::Cursor, thread, time::Duration};
 
 pub fn get_camera_1_vec() -> Result<Vec<u8>> {
-    Ok(ureq::get("http://hackathon-11-camera.local:50051/frame")
+    // Ok(ureq::get("http://hackathon-11-camera.local:50051/frame")
+   Ok(ureq::get("http://192.168.0.118:50051/frame")
         .header("Authorization", "983149")
         .call()?
         .body_mut()
@@ -15,7 +16,8 @@ pub fn get_camera_1_vec() -> Result<Vec<u8>> {
 }
 
 pub fn get_camera_2_vec() -> Result<Vec<u8>> {
-    Ok(ureq::get("http://hackathon-12-camera.local:50051/frame")
+    // Ok(ureq::get("http://hackathon-12-camera.local:50051/frame")
+   Ok(ureq::get("http://192.168.0.107:50051/frame")
         .header("Authorization", "378031")
         .call()?
         .body_mut()
