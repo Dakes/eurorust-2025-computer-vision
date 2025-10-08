@@ -1,0 +1,6 @@
+[package]
+name = "eurorust-2025-computer-vision"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
