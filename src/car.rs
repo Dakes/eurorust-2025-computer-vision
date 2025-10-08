@@ -22,6 +22,8 @@ struct ControlCarResponse {
 // speed for 180°:  0.458
 // speed for 90°:  0.229
 // speed for 45°:  0.1145
+
+// speed: -1 - 1
 pub fn move_car(speed: f32, flip: bool) -> Result<()> {
     // ureq::put("http://hackathon-1-car.local:5000")
     ureq::put("http://192.168.0.212:5000")
@@ -30,4 +32,18 @@ pub fn move_car(speed: f32, flip: bool) -> Result<()> {
         .body_mut()
         .read_json::<ControlCarResponse>()?;
     Ok(())
+}
+
+pub fn drive() -> Result<()> {
+    move_car(1., false)
+}
+
+// turn in clockwise direction
+pub fn turn_car(right: bool) -> Result<()> {
+    let speed = 0.916 / 32.0;
+    if right {
+        move_car(speed, false)
+    } else {
+        move_car(-speed, false)
+    }
 }
