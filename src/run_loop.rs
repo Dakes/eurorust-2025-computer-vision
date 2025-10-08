@@ -75,7 +75,7 @@ fn move_car(speed: f32, flip: bool) -> Result<ControlCarResponse> {
         .read_json::<ControlCarResponse>()?)
 }
 
-fn convert(i: Vec<u8>) -> Result<(DynamicImage)> {
+fn convert(i: Vec<u8>) -> Result<DynamicImage> {
     Ok(ImageReader::new(Cursor::new(i))
         .with_guessed_format()?
         .decode()?)
