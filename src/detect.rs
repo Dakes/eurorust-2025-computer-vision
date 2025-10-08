@@ -19,6 +19,7 @@ pub fn detect_markers(img: &Mat) -> Result<Vec<DetectedObject>> {
 
     let mut corners = Vector::<Vector<Point2f>>::new();
     let mut ids_mat = Mat::default();
+    let mut def = Mat::default();
     let mut rejected = Vector::<Vector<Point2f>>::new();
 
     aruco::detect_markers(
@@ -28,6 +29,8 @@ pub fn detect_markers(img: &Mat) -> Result<Vec<DetectedObject>> {
         &mut ids_mat,
         &params,
         &mut rejected,
+        &def,
+        &def
     )?;
 
     let ids = mat_ids_to_vec(&ids_mat)?;
