@@ -33,14 +33,15 @@ pub fn detect_markers(img: &Mat) -> Result<Vec<DetectedObject>> {
 
     let ids = mat_ids_to_vec(&ids_mat)?;
 
-    Ok(ids
+    let result = ids
         .iter()
         .zip(corners)
         .map(|(i, cs)| DetectedObject {
             id: *i,
             corners: cs,
         })
-        .collect_vec())
+        .collect::<Vec<_>>();
+    Ok(result);
 }
 
 fn mat_ids_to_vec(m: &Mat) -> opencv::Result<Vec<i32>> {
