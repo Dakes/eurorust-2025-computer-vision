@@ -36,7 +36,10 @@ pub fn detect_markers(img: &Mat) -> Result<Vec<DetectedObject>> {
     Ok(ids
         .iter()
         .zip(corners)
-        .map(|(i, cs)| DetectedObject { id: i, corners: cs })
+        .map(|(i, cs)| DetectedObject {
+            id: *i,
+            corners: cs,
+        })
         .collect_vec())
 }
 
