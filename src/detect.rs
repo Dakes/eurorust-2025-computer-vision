@@ -11,6 +11,11 @@ pub struct Detection {
     pub rejected: Vector<Vector<opencv::core::Point2f>>,
 }
 
+pub struct DetectedObject {
+    id: i32,
+    corners: Vec<Point2f>,
+}
+
 pub fn detect_markers(img: &Mat) -> opencv::Result<Detection> {
     let dict = aruco::get_predefined_dictionary(
         aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50
