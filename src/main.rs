@@ -23,7 +23,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    // Detect,
+    Detect,
     Loop,
 }
 
@@ -31,9 +31,9 @@ fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        // Commands::Detect => {
-        //     run_detect();
-        // }
+        Commands::Detect => {
+            run_detect();
+        }
         Commands::Loop => {
             run_loop::run_loop();
         }
