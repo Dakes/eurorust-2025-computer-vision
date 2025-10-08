@@ -1,7 +1,9 @@
-#![allow(unused_variables, dead_code)]
+#![allow(unused_variables, dead_code, unused_imports)]
 
 use anyhow::Result;
+use image::{DynamicImage, ImageReader};
 use serde::{Deserialize, Serialize};
+use std::io::Cursor;
 
 fn main() {
     let q = get_target_quadrant().unwrap();
@@ -15,6 +17,10 @@ fn main() {
 
     let c = move_car(0.5, false).unwrap();
     println!("{c:?}");
+
+    let i = get_camera_1_vec().unwrap();
+    let x = convert(i).unwrap();
+    println!("{:?}", &x.as_bytes()[..10]);
 }
 
 fn get_target_quadrant() -> Result<u8> {
@@ -59,4 +65,10 @@ fn move_car(speed: f32, flip: bool) -> Result<ControlCarResponse> {
         .send_json(&ControlCarRequest { speed, flip })?
         .body_mut()
         .read_json::<ControlCarResponse>()?)
+}
+
+fn convert(i: Vec<u8>) -> Result<(DynamicImage)> {
+    Ok(ImageReader::new(Cursor::new(i))
+        .with_guessed_format()?
+        .decode()?)
 }
