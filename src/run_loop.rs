@@ -6,6 +6,12 @@ use image::{DynamicImage, ImageReader};
 use serde::{Deserialize, Serialize};
 use std::{io::Cursor, thread, time::Duration};
 
+use crate::{
+    camera::{convert, get_camera_1_vec, get_camera_2_vec},
+    car::move_car,
+    target::get_target_quadrant,
+};
+
 pub fn run_loop() {
     loop {
         // get image data
@@ -33,52 +39,14 @@ pub fn run_loop() {
     }
 }
 
-fn get_target_quadrant() -> Result<u8> {
-    Ok(ureq::get("http://192.168.0.177:31415/quadrant")
-        .header("Authorization", "606545")
-        .call()?
-        .body_mut()
-        .read_to_string()?
-        .parse()?)
+fn turn_right() -> Result<()> {
+    move_car(0.27, true)
 }
 
-fn get_camera_1_vec() -> Result<Vec<u8>> {
-    Ok(ureq::get("http://hackathon-11-camera.local:50051/frame")
-        .header("Authorization", "983149")
-        .call()?
-        .body_mut()
-        .read_to_vec()?)
+fn turn_left() -> Result<()> {
+    move_car(-0.27, true)
 }
 
-fn get_camera_2_vec() -> Result<Vec<u8>> {
-    Ok(ureq::get("http://hackathon-12-camera.local:50051/frame")
-        .header("Authorization", "378031")
-        .call()?
-        .body_mut()
-        .read_to_vec()?)
-}
-
-#[derive(Serialize, Debug)]
-struct ControlCarRequest {
-    speed: f32,
-    flip: bool,
-}
-
-#[derive(Deserialize, Debug)]
-struct ControlCarResponse {
-    status: String,
-}
-
-fn move_car(speed: f32, flip: bool) -> Result<ControlCarResponse> {
-    Ok(ureq::put("http://hackathon-1-car.local:5000")
-        .header("Authorization", "985898")
-        .send_json(&ControlCarRequest { speed, flip })?
-        .body_mut()
-        .read_json::<ControlCarResponse>()?)
-}
-
-fn convert(i: Vec<u8>) -> Result<DynamicImage> {
-    Ok(ImageReader::new(Cursor::new(i))
-        .with_guessed_format()?
-        .decode()?)
+fn drive_forward() -> Result<()> {
+    move_car(1.0, false)
 }

@@ -8,7 +8,10 @@ use serde::{Deserialize, Serialize};
 use std::{io::Cursor, thread, time::Duration};
 
 mod detect;
+mod camera;
+mod car;
 mod run_loop;
+mod target;
 
 #[derive(Parser)]
 #[command(name = "robot")]
