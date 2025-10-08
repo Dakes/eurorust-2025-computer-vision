@@ -82,15 +82,3 @@ pub fn run_loop() {
         thread::sleep(Duration::from_secs(1));
     }
 }
-
-fn turn_right() -> Result<()> {
-    move_car(0.27, true)
-}
-
-fn turn_left() -> Result<()> {
-    move_car(-0.27, true)
-}
-
-fn drive_forward() -> Result<()> {
-    move_car(1.0, false)
-}
