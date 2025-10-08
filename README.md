@@ -105,7 +105,8 @@ The target quadrant will change every 5 minutes throughout the day, and every 30
 sudo apt install -y \
     libopencv-dev libopencv-contrib-dev \
     clang cmake pkg-config build-essential \
-    llvm
+    llvm \
+    libcurl4-openssl-dev
 ```
 
 # Mac
