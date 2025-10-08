@@ -9,6 +9,7 @@ use opencv::core::{Mat, Point2f};
 use opencv::imgproc;
 use opencv::prelude::*;
 use crate::{camera::{convert, get_camera_1_vec, get_camera_2_vec}, car::move_car, detect, target::get_target_quadrant};
+use crate::car::turn_car;
 
 pub fn dynamic_image_to_mat_bgr(img: &DynamicImage) -> opencv::Result<Mat> {
     // Convert to RGB8 format
@@ -45,7 +46,7 @@ pub fn run_loop() {
 
         println!("here -1.5");
         // get target
-        let t = get_target_quadrant().unwrap();
+        let t = 14;//get_target_quadrant().unwrap();
         println!("{t}");
 
         println!("here -1");
@@ -75,12 +76,19 @@ pub fn run_loop() {
             }
         }
 
+        if car1.len() == 0 {
+            move_car(0.0, false);
+            thread::sleep(Duration::from_millis(50));
+
+            continue
+        }
+
         let mut index = 0;
         let mut nearest_point = 0;
         let mut min_dis = 100000.0;
 
         for p in car1 {
-            let new_d = get_distance(p, tar1[0]);
+            let new_d = get_distance(p);
             if new_d < min_dis {
                 nearest_point = index;
                 min_dis = new_d;
@@ -91,23 +99,36 @@ pub fn run_loop() {
 
         let flip = nearest_point != 0;
 
-        for marker in res2.unwrap() {
-            println!("Camera 2 detected marker ID: {}", marker.id);
-            if (marker.id == t as i32) {
-                println!("Camera 2 sees the target!");
-            }
-
+        if (min_dis < 50.0) {
+            println!("{}", min_dis);
+            println!("stop");
+            continue;
         }
 
         // move car
-        let c = move_car(0.5, flip).unwrap();
-        println!("{c:?}");
+        if nearest_point == 0 {
+
+            println!("move");
+            println!("{}", min_dis);
+            move_car(0.5, false);
+        } else if nearest_point < 2 {
+            println!("move rigth");
+            println!("{}", min_dis);
+
+            turn_car(true);
+        } else {
+            println!("move left");
+            println!("{}", min_dis);
+
+
+            turn_car(false);
+        }
 
         // sleep
-        thread::sleep(Duration::from_secs(1));
+        thread::sleep(Duration::from_millis(50));
     }
 }
 
-fn get_distance(car: Point2f, tar: Point2f) -> f32 {
-    return (car.x - tar.x).abs() + (car.y - tar.y).abs()
+fn get_distance(car: Point2f) -> f32 {
+    return (car.x - 512.0).abs() + (car.y - 512.0).abs()
 }

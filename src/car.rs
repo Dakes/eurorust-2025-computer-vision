@@ -40,11 +40,11 @@ pub fn drive() -> Result<()> {
 
 // turn in clockwise direction
 pub fn turn_car(right: bool) -> Result<()> {
-    let speed_for_360 = 0.916;
-    let speed = speed_for_360 / 32.0;
+    let speed_for_360 = 0.3;
+    let speed = speed_for_360 / 1.0;
     if right {
-        move_car(speed, false)
+        move_car(speed, true)
     } else {
-        move_car(-speed, false)
+        move_car(-speed, true)
     }
 }
