@@ -18,6 +18,10 @@ struct ControlCarResponse {
     status: String,
 }
 
+// 1s full speed 360°
+// speed for 180°:  0.458
+// speed for 90°:  0.229
+// speed for 45°:  0.1145
 pub fn move_car(speed: f32, flip: bool) -> Result<()> {
     // ureq::put("http://hackathon-1-car.local:5000")
     ureq::put("http://192.168.0.212:5000")
