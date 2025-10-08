@@ -1,35 +1,43 @@
+#![allow(unused_variables, dead_code, unused_imports)]
+
+use anyhow::Result;
+use itertools::Itertools;
 use opencv::{
     aruco,
-    core::{Mat, Scalar, Vector},
-    prelude::*,
+    core::{Mat, Point2f, Scalar, Vector},
     imgcodecs,
+    prelude::*,
 };
-
-pub struct Detection {
-    pub ids: Vec<i32>,
-    pub corners: Vector<Vector<opencv::core::Point2f>>,
-    pub rejected: Vector<Vector<opencv::core::Point2f>>,
-}
 
 pub struct DetectedObject {
     id: i32,
     corners: Vec<Point2f>,
 }
 
-pub fn detect_markers(img: &Mat) -> opencv::Result<Detection> {
-    let dict = aruco::get_predefined_dictionary(
-        aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50
-    )?;
+pub fn detect_markers(img: &Mat) -> Result<Vec<DetectedObject>> {
+    let dict = aruco::get_predefined_dictionary(aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)?;
     let params = aruco::DetectorParameters::create()?;
 
     let mut corners = Vector::new();
     let mut ids_mat = Mat::default();
     let mut rejected = Vector::new();
 
-    aruco::detect_markers(img, &dict, &mut corners, &mut ids_mat, &params, &mut rejected)?;
+    aruco::detect_markers(
+        img,
+        &dict,
+        &mut corners,
+        &mut ids_mat,
+        &params,
+        &mut rejected,
+    )?;
 
     let ids = mat_ids_to_vec(&ids_mat)?;
-    Ok(Detection { ids, corners, rejected })
+
+    Ok(ids
+        .iter()
+        .zip(corners)
+        .map(|(i, cs)| DetectedObject { id: i, corners: cs })
+        .collect_vec())
 }
 
 fn mat_ids_to_vec(m: &Mat) -> opencv::Result<Vec<i32>> {

@@ -20,7 +20,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    Detect,
+    // Detect,
     Loop,
 }
 
@@ -28,9 +28,9 @@ fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Detect => {
-            run_detect();
-        }
+        // Commands::Detect => {
+        //     run_detect();
+        // }
         Commands::Loop => {
             run_loop::run_loop();
         }
@@ -44,7 +44,7 @@ fn run_detect() -> Result<()> {
     }
 
     let result = detect::detect_markers(&img)?;
-    println!("Detected {} markers: {:?}", result.ids.len(), result.ids);
+    // println!("Detected {} markers: {:?}", result.ids.len(), result.ids);
 
     // Optional: draw and save an annotated image for quick visual feedback
     // detect::save_with_overlays(&img, &result, "/tmp/annotated.jpg")?;
